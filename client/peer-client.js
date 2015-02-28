@@ -1,12 +1,13 @@
 'use strict';
 
-function establishConnection() {
-	var peer = new Peer({host: 'localhost', port: 9000, path: ''});
+var peer = new Peer({key: 'lwjd5qra8257b9'});
 
-	peer.on('open', function(id) {
-		var conn = peer.connect('master-1');
-		conn.send('Test!');
-	});
-}
+peer.on('open', function(id) {
+	console.log(id);
+});
 
-establishConnection();
+peer.on('error', function(err) {
+	console.log(err);
+});
+
+peer.connect('master-1').send('Test!');

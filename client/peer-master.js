@@ -1,15 +1,21 @@
 'use strict';
 
-var peer = new Peer('master-1', {host: 'localhost', port: 9000, path: ''});
+var peer = new Peer('master-1', {key: 'lwjd5qra8257b9'});
 
 peer.on('open', function(id) {
-  peer.on('connection', function(conn) {
-
-    conn.on('open', function() {
-      conn.on('data', function(data) {
-        console.log('Received', data);
-      });
-    });
-
-  });
+  console.log(id);
 });
+
+peer.on('connection', connect);
+
+peer.on('error', function(err) {
+  console.log(err);
+})
+
+function connect(c) {
+  console.log("connected through:", c.id);
+
+  c.on('data', function(data) {
+    console.log("Data received");
+  });
+}
