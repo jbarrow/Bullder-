@@ -1,0 +1,45 @@
+<div class="panel panel-default">
+  <div class="panel-body">
+    <div class="row">
+      <div class="col-xs-2">
+        <!-- Voting Indicators !-->
+        <div class="pull-left">
+          <a href=""><i class="fa fa-fw fa-arrow-up text-success"></i></a> <br/>
+          <a href=""><i class="fa fa-fw fa-arrow-down text-muted"></i></a>
+        </div>
+        <div class="voting text-muted" style="padding-top: 0.6em; padding-left: 5px;">
+          43
+        </div>
+      </div>
+      <div class="col-xs-6">
+        <a href="#" class="thumbnail" ng-if="data.photo">
+          <img ng-src="{{ data.photo }}">
+        </a>
+        <p>{{ data.title }}</p>
+        <div ng-if="data.data">
+          <a ng-href="{{ data.data.download }}" class="btn btn-success btn-sm">
+            <i class="fa fa-download"></i>
+            Download (.{{ data.data.extension }}) {{ data.data.size }}
+          </a>
+        </div>
+      </div>
+      <div class="col-xs-4">
+        <!-- Time Posted !-->
+        <div class="text-success">
+          <i class="fa fa-fw fa-clock-o"></i>
+          {{ data.time }}
+        </div>
+        <!-- Location !-->
+        <div class="text-success">
+          <i class="fa fa-fw fa-map-marker"></i>
+          {{ data.distance }}
+        </div>
+        <!-- Comments !-->
+        <div class="text-success">
+          <i class="fa fa-fw fa-comment"></i>
+          {{ data.comments.length }} repl<bullder-plural singular="'y'" plural="'ies'" count="data.comments.length"></bullder-plural>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

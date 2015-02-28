@@ -1,0 +1,14 @@
+<div class="text-center">
+  <div class="btn-group" data-toggle="buttons">
+    <label class="btn btn-primary btn-sm" ng-class="{'active': view == 'new'}">
+      <input ng-click="view = 'new'" type="radio" autocomplete="off" ng-checked="view == 'new'"> New
+    </label>
+    <label class="btn btn-primary btn-sm" ng-class="{'active': view == 'hot'}">
+      <input ng-click="view = 'hot'" type="radio" autocomplete="off" ng-checked="view == 'hot'">Hot
+    </label>
+  </div>
+</div>
+{{ view }}
+<br/>
+
+<bullder-viewer data="obj" ng-repeat="obj in data"></bullder-viewer>

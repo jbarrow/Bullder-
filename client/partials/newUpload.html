@@ -1,0 +1,28 @@
+<h1>Upload a New Bullder</h1>
+<form>
+  <div class="form-group">
+    <label for="fileInput">File to Upload</label>
+    <input id="fileInput" name="fileInput" class="form-control" type="file"/>
+  </div>
+  <div class="form-group">
+    <label for="title">Title</label>
+    <textarea id="title" name="title" class="form-control"></textarea>
+  </div>
+  <div class="form-group">
+    <label for="location">Location of Bullder</label>
+    <div class="form-control" style="height: auto;">
+      <div class="btn-group" data-toggle="buttons">
+        <label class="btn btn-primary active">
+          <input type="radio" name="options" id="option1" autocomplete="off" checked> 1 mile
+        </label>
+        <label class="btn btn-primary">
+          <input type="radio" name="options" id="option2" autocomplete="off"> 5 miles
+        </label>
+        <label class="btn btn-primary">
+          <input type="radio" name="options" id="option3" autocomplete="off"> Max
+        </label>
+      </div>
+    </div>
+  </div>
+  <button type="submit" class="btn btn-success">Bullder</button>
+</form>
