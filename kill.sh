@@ -1,4 +1,4 @@
 #!/bin/sh
 
-pkill node
+#pkill node
 pkill python
