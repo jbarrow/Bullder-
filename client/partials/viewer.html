@@ -36,8 +36,10 @@
         </div>
         <!-- Comments !-->
         <div class="text-success">
-          <i class="fa fa-fw fa-comment"></i>
-          {{ data.comments.length }} repl<bullder-plural singular="'y'" plural="'ies'" count="data.comments.length"></bullder-plural>
+          <a ng-href="#/view/{{ data.id }}">
+            <i class="fa fa-fw fa-comment"></i>
+            {{ data.comments.length }} repl<bullder-plural singular="'y'" plural="'ies'" count="data.comments.length"></bullder-plural>
+          </a>
         </div>
       </div>
     </div>
