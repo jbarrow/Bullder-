@@ -43,14 +43,35 @@ bullderServices.factory("bullderProtocol", ["$q", "$timeout", "bullderPeerContro
     }
     bullderPeerController.registerHandler("newVote", gotNewVote);
 
-    return {
-      postItem: function(obj) {
-          obj.id = Math.random();
-          cachedData[obj.id] = obj;
+    var fileToDataUrl = function(f) {
+        var defer = $q.defer();
+        var reader = new FileReader();
 
-          bullderPeerController.broadcast("newPost", {
-              payload: obj,
-          })
+        // Closure to capture the file information.
+        reader.onload = (function(theFile) {
+            return function(e) {
+                // e.target.result
+                defer.resolve(e.target.result);
+            };
+        })(f);
+
+        // Read in the image file as a data URL.
+        reader.readAsDataURL(f);
+        return defer.promise;
+    }
+
+    return {
+      postItem: function(obj, file) {
+          fileToDataUrl(file).then(function(url) {
+              obj.id = Math.random();
+              obj.photo = url;
+
+              cachedData[obj.id] = obj;
+
+              bullderPeerController.broadcast("newPost", {
+                  payload: obj,
+              })
+          });
       },
       postComment: function(obj, comment) {
           comment.time = "Just now";

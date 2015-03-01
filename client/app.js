@@ -82,7 +82,7 @@ bullderApp.controller('BullderNewController', ['$scope', 'bullderProtocol', func
             }
         };
 
-        bullderProtocol.postItem(theObject);
+        bullderProtocol.postItem(theObject, theFile);
     }
 }]);
 
@@ -116,14 +116,18 @@ bullderApp.controller('BullderViewController', ['$scope', '$route', 'bullderProt
     }
 }]);
 
-bullderApp.controller('BullderController', ['$scope', 'bullderProtocol', function($scope, bullderProtocol) {
+bullderApp.controller('BullderController', ['$scope', 'bullderProtocol', '$interval', function($scope, bullderProtocol, $interval) {
     $scope.sortOrder = "-time";
 
     $scope.data = undefined;
-    bullderProtocol.getAllData().then(function(data) {
-       $scope.data = data;
-
-    });
+    
+    var refresh = function() {
+        bullderProtocol.getAllData().then(function(data) {
+            $scope.data = data;
+        });   
+    }
+    $interval(refresh, 3000);
+    refresh();
 
     $scope.vote=function(obj, vote) {
         if(vote == 1) {
