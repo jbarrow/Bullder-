@@ -6,7 +6,7 @@ $(document).ready(function() {
    navigator.geolocation.getCurrentPosition(found_location); 
 });
 
-var bullderApp = angular.module('bullderApp', ["ngRoute"]).config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
+var bullderApp = angular.module('bullderApp', ["ngRoute", "bullderServices"]).config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
     $routeProvider.when('/new', {
         templateUrl: "partials/new.html",
         controller: "BullderNewController",
@@ -22,55 +22,54 @@ var bullderApp = angular.module('bullderApp', ["ngRoute"]).config(['$routeProvid
     });
 }]);
 
-var mockComments = [
-    {
-        id: 0,
-        text: "Hello, world",
-        op: false,
-        time: "1 minute ago",
-    },
-    {
-        id: 1,
-        text: "This is a cool comment.",
-        op: true,
-        time: "Just now",
-    }
-];
 
-var mockData = [
-    {
-        id: 0,
-        time: "4 hours ago",
-        distance: "< 1 mile away",
-        comments: mockComments,
-        title: "Pellentesque dapibus suscipit ligula.  Donec posuere augue in quam.",
-        photo: "http://placehold.it/420x320",
-    },
-    {
-        id: 1,
-        time: "4 hours ago",
-        distance: "< 1 mile away",
-        comments: mockComments,
-        title: "Pellentesque dapibus suscipit ligula.  Donec posuere augue in quam.",
-        data: {
-            extension: "pdf",
-            size: "4MB",
-            download: "http://google.com",
-        }
-    },
-]
 
 bullderApp.controller('BullderNewController', ['$scope', function($scope) {
     
 }]);
 
-bullderApp.controller('BullderViewController', ['$scope', '$route', function($scope, $route) {
-    $scope.data = mockData[$route.current.params["id"]];
+bullderApp.controller('BullderViewController', ['$scope', '$route', 'bullderProtocol', function($scope, $route, bullderProtocol) {
+    $scope.data = undefined;
+    bullderProtocol.getDataWithId($route.current.params["id"]).then(function(data) {
+        $scope.data = data;
+    })
+
+    $scope.vote = function(obj, vote) {
+        if (vote == 1) {
+            bullderProtocol.upvoteItem(obj);
+        } else {
+            bullderProtocol.downvoteItem(obj);
+        }
+    }
+
+    $scope.postComment = function() {
+        console.log($scope.newComment);
+        bullderProtocol.postComment($scope.data, $scope.newComment);
+
+        // Clear the New Comment Fields
+        $scope.newComment = {
+            name: "",
+            text: "",
+        };
+    }
 }]);
 
-bullderApp.controller('BullderController', ['$scope', function($scope) {
+bullderApp.controller('BullderController', ['$scope', 'bullderProtocol', function($scope, bullderProtocol) {
     $scope.view = "new";
-    $scope.data = mockData;
+
+    $scope.data = undefined;
+    bullderProtocol.getAllData().then(function(data) {
+       $scope.data = data;
+        
+    });
+
+    $scope.vote=function(obj, vote) {
+        if(vote == 1) {
+            bullderProtocol.upvoteItem(obj);
+        } else {
+            bullderProtocol.downvoteItem(obj);
+        }
+    }
 }]);
 
 bullderApp.directive('bullderViewer', function() {
@@ -78,6 +77,7 @@ bullderApp.directive('bullderViewer', function() {
         restrict: 'E',
         scope: {
             data: "=data",
+            votefunc: "=votefunc",
         },
         templateUrl: 'partials/viewer.html',
     }
