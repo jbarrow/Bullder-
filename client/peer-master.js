@@ -17,5 +17,8 @@ function connect(c) {
 
   c.on('data', function(data) {
     console.log('Data received!');
+    console.log(data.id);
+    console.log(data.pos[0] + ', ' + data.pos[1]);
+    c.send({acknowledge: true});
   });
 }
