@@ -41,6 +41,9 @@ bullderServices.factory("bullderProtocol", ["$q", "$timeout", "bullderPeerContro
 
         seenVotes[vote.r] = true;
         cachedData[vote.id].score += vote.vote;
+        if (cachedData[vote.id].score <= -5) {
+            delete cachedData[vote.id];
+        }
         bullderPeerController.broadcast("newVote", vote);
     }
     bullderPeerController.registerHandler("newVote", gotNewVote);
