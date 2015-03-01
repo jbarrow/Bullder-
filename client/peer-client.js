@@ -5,7 +5,6 @@ var clientId;
 
 
 function connect() {
-
 	peer = new Peer({key: 'lwjd5qra8257b9', debug: 3});
 
 	peer.on('open', function(id) {
@@ -56,7 +55,7 @@ function sendData(peerId, data) {
 
 		// get response back
 		conn.on('data', function(data) {
-			
+
 			// close connection on acknowledgement
 			if (data.acknowledge) {
 				console.log("Data sent and acknowledged - closing connection.");

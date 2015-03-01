@@ -1,6 +1,6 @@
 'use strict';
 
-var peer = new Peer('master-3', {key: 'lwjd5qra8257b9', debug: 3});
+var peer = new Peer('master-100', {key: 'lwjd5qra8257b9', debug: 3});
 var clients = {};
 
 peer.on('open', function(id) {
@@ -8,6 +8,8 @@ peer.on('open', function(id) {
 });
 
 peer.on('connection', connect);
+
+peer.on('close', close);
 
 peer.on('error', function(err) {
   console.log(err);
@@ -23,6 +25,7 @@ function connect(c) {
     c.send({acknowledge: true});
     clients[data.id] = data.pos;
     console.log(clients);
+    console.log(get_neighbors(data.id));
   });
 }
 
@@ -50,6 +53,17 @@ function distance(pos1, pos2) {
   return dist;
 }
 
-function get_neighbors() {
+// Get the "neighbors" based on a max distance. Here we
+// assume that all peers connect to one master.
+function get_neighbors(client, max_distance) {
+  if(typeof(max_distance) === 'undefined') max_distance = 1.0;
 
+  neighbors = [];
+  for (var potential in clients) {
+    if(distance(clients[client], clients[potential]) < max_distance) {
+      neighbors.append(potential);
+    }
+  }
+
+  return neighbors;
 }
