@@ -9,13 +9,14 @@
     <label for="title">Title for Bullder</label>
     <textarea class="form-control" name="title" id="title"></textarea>
   </div>
-  <button type="submit" class="btn btn-sm btn-success">Bullder Now</button>
+  <bullder-distance></bullder-distance>
+  <a href="" ng-click="newSnapBullder()" class="btn btn-success btn-sm">New Bullder</a>
 </form>
 
 <br/>
 
 <script type="text/javascript">
-var canvas = document.getElementById("canvas"),
+  var canvas = document.getElementById("canvas"),
 		context = canvas.getContext("2d"),
 		video = document.getElementById("video"),
 		videoObj = { "video": true },

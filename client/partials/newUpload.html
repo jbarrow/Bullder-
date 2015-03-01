@@ -6,36 +6,8 @@
   </div>
   <div class="form-group">
     <label for="title">Title</label>
-    <textarea id="title" name="title" class="form-control"></textarea>
+    <textarea ng-model="title" id="title" name="title" class="form-control"></textarea>
   </div>
-  <div class="form-group">
-    <label for="location">Range of Bullder</label>
-    <div class="form-control" style="height: auto;">
-      <div class="text-center">
-        <img ng-src="{{ showImage }}"> <br/>
-        <!-- 0.1, 0.25, 0.5, 1, 3, 10 -->
-        <input ng-model="distance" id="dataSlider" data-slider-id="dataSlider1" type="text" data-slider-min="0.1" data-slider-max="10" data-slider-step=".1" data-slider-value="2"/>
-        <script>
-          $('#dataSlider').slider({
-	    scale: 'logarithmic',
-	    formatter: function(value) {
-	      return 'Distance: ' + value + ' miles';
-	    }
-          });
-        </script>
-      </div>
-      <!-- <div class="btn-group" data-toggle="buttons"> -->
-      <!--   <label class="btn btn-primary active"> -->
-      <!--     <input type="radio" name="options" id="option1" autocomplete="off" checked> 1 mile -->
-      <!--   </label> -->
-      <!--   <label class="btn btn-primary"> -->
-      <!--     <input type="radio" name="options" id="option2" autocomplete="off"> 5 miles -->
-      <!--   </label> -->
-      <!--   <label class="btn btn-primary"> -->
-      <!--     <input type="radio" name="options" id="option3" autocomplete="off"> Max -->
-      <!--   </label> -->
-      <!-- </div> -->
-    </div>
-  </div>
-  <button type="submit" class="btn btn-success">Bullder</button>
+  <bullder-distance></bullder-distance>
+  <a ng-click="newUploadBullder()" href="" class="btn btn-success">Bullder</a>
 </form>

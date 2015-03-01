@@ -452,7 +452,7 @@ var util = require('util');
 // Create an id from a `buffer`.
 //
 var Id = function (buf) {
-    if (!(buf instanceof Buffer) || buf.length !== Id.SIZE)
+    if (!(Buffer.isBuffer(buf)) || buf.length !== Id.SIZE)
         throw new Error('invalid buffer');
     this._buf = buf;
 };

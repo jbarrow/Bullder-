@@ -14,6 +14,7 @@ bullderDht.factory('bullderDhtController', ['$q', function($q) {
             var defer = $q.defer();
             kad.Dht.spawn(rpc, seeds, function(err, dht) {
                 if (err == undefined) {
+                    theDht = dht;
                     defer.resolve(dht);
                     return
                 }

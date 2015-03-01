@@ -1,72 +1,88 @@
-var bullderServices = angular.module('bullderServices', ['bullderDht']);
+var bullderServices = angular.module('bullderServices', ['bullderPeers']);
 
-bullderServices.factory("bullderProtocol", ["$q", "$timeout", "bullderDhtController", function($q, $timeout, bullderDhtController) {
+bullderServices.factory("bullderProtocol", ["$q", "$timeout", "bullderPeerController", function($q, $timeout, bullderPeerController) {
     var rpc = window.rpcHandler;
 
-    var mockComments = [
-        {
-            id: 0,
-            text: "Hello, world",
-            op: false,
-            time: Date.parse("Feb 25, 2015"),
-        },
-        {
-            id: 1,
-            text: "This is a cool comment.",
-            op: true,
-            time: Date.parse("Feb 29, 2015"),
-        }
-    ];
-
-    var cachedData = [
-        {
-            id: 0,
-            time: Date.parse("Feb 28, 2015"),
-            score: 5,
-            distance: "< 1 mile away",
-            comments: mockComments,
-            title: "Pellentesque dapibus suscipit ligula.  Donec posuere augue in quam.",
-            photo: "http://placehold.it/420x320",
-        },
-        {
-            id: 1,
-            time: Date.parse("Feb 27, 2015"),
-            score: 20,
-            distance: "< 1 mile away",
-            comments: mockComments,
-            title: "Pellentesque dapibus suscipit ligula.  Donec posuere augue in quam.",
-            data: {
-                extension: "pdf",
-                size: "4MB",
-                download: "http://google.com",
-            }
-        },
-    ]
+    var cachedData = {};
 
     var isOp = function(obj) {
         return false;
     }
 
+    var gotNewComment = function(comment) {
+        if(cachedData[comment.id] === undefined) {
+            return
+        }
+
+        cachedData[comment.id].comments.push(comment.payload);
+        bullderPeerController.broadcast("newComment", comment);
+    }
+    var gotNewPost = function(post) {
+        if(cachedData[post.payload.id] !== undefined) {
+            console.log("We already have this post.")
+            return
+        }
+
+        var blankObj = {};
+        blankObj[post.payload.id] = post.payload
+
+        angular.extend(cachedData, blankObj);
+        // cachedData[post.payload.id] = post.payload;
+        bullderPeerController.broadcast("newPost", post);
+    }
+    bullderPeerController.registerHandler("newComment", gotNewComment);
+    bullderPeerController.registerHandler("newPost", gotNewPost);
+
+    var gotNewVote = function(vote) {
+        if(cachedData[vote.id] === undefined) {
+            return
+        }
+
+        cachedData[vote.id].score += vote.vote;
+        bullderPeerController.broadcast("newVote", vote);
+    }
+    bullderPeerController.registerHandler("newVote", gotNewVote);
+
     return {
       postItem: function(obj) {
-          cachedData.push(obj);
+          obj.id = Math.random();
+          cachedData[obj.id] = obj;
+
+          bullderPeerController.broadcast("newPost", {
+              payload: obj,
+          })
       },
       postComment: function(obj, comment) {
           comment.time = "Just now";
           comment.op = isOp(obj);
           obj.comments.push(comment);
+
+          bullderPeerController.broadcast("newComment", {
+              payload: comment,
+              id: obj.id,
+          })
       },
       upvoteItem: function(obj) {
           if (obj.voted == undefined) {
               obj.voted = 1;
               obj.score++;
           }
+
+          bullderPeerController.broadcast("newVote", {
+              id: obj.id,
+              vote: 1,
+          })
       },
       downvoteItem: function(obj) {
           if (obj.voted == undefined) {
               obj.voted = -1;
               obj.score--;
           }
+
+          bullderPeerController.broadcast("newVote", {
+              id: obj.id,
+              vote: -1,
+          })
       },
       getAllData: function() {
           var defer = $q.defer();

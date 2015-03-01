@@ -1,13 +1,3 @@
-$(document).ready(function() {
-  var found_location = function(pos) {
-      console.dir(pos);
-      window.position = pos;
-      connectToMasterPeer();
-  }
-
-  navigator.geolocation.getCurrentPosition(found_location);
-});
-
 var bullderApp = angular.module('bullderApp', ["ngRoute", "bullderServices"]).config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
     $routeProvider.when('/new', {
         templateUrl: "partials/new.html",
@@ -18,17 +8,33 @@ var bullderApp = angular.module('bullderApp', ["ngRoute", "bullderServices"]).co
     }).when('/view/:id', {
         templateUrl: "partials/info.html",
         controller: "BullderViewController",
+    }).when('/master', {
+        templateUrl: "partials/master.html",
+        controller: "BullderMasterController",
+    }).when('/client', {
+        templateUrl: "partials/client.html",
+        controller: "BullderClientController",
     }).otherwise({
        templateUrl: "partials/home.html",
         controller: "BullderController",
     });
 }]);
 
+bullderApp.controller('BullderClientController', ["bullderPeerController", "$location", function(bullderPeerController, $location) {
+    bullderPeerController.createPeer();
+    console.log("You are the client.");
+    $location.path("/");
+}]);
 
+bullderApp.controller('BullderMasterController', ["bullderPeerController", function(bullderPeerController) {
+    bullderPeerController.createPeer(true);
+}]);
 
-bullderApp.controller('BullderNewController', ['$scope', function($scope) {
+bullderApp.controller('BullderNewController', ['$scope', 'bullderProtocol', function($scope, bullderProtocol) {
     $scope.showImage = "images/Neighborhood.png";
+    $scope.currentDistance = 2;
     $scope.$watch("distance", function(val) {
+        $scope.currentDistance = val;
         // OneHouse [0.1]
         // ThreeHouse [0.25]
         // Street [0.5]
@@ -51,7 +57,33 @@ bullderApp.controller('BullderNewController', ['$scope', function($scope) {
         } else if (val > 6 && val <= 10) {
             $scope.showImage = "images/City.png"
         }
-    })
+    });
+
+    $scope.newSnapBullder = function() {
+        context.drawImage(video, 0, 0, 640, 480);
+    }
+
+    $scope.newUploadBullder = function() {
+        var theFile = $("#fileInput")[0].files[0];
+        console.log("Uploading... ", theFile.name.split(".")[1], theFile.size, theFile.type);
+        var theObject = {
+            id: false,
+            time: new Date(),
+            score: 0,
+            location: [window.position.coords.latitude, window.position.coords.longitude],
+            distanceToLive: $scope.currentDistance,
+            comments: [],
+            title: $scope.title,
+            data: {
+                extension: theFile.name.split(".")[1],
+                mime: theFile.type,
+                size: theFile.size,
+                download: "",
+            }
+        };
+
+        bullderProtocol.postItem(theObject);
+    }
 }]);
 
 bullderApp.controller('BullderViewController', ['$scope', '$route', 'bullderProtocol', function($scope, $route, bullderProtocol) {
@@ -125,6 +157,13 @@ bullderApp.directive('bullderLoading', function() {
     }
 })
 
+bullderApp.directive('bullderDistance', function() {
+    return {
+        restrict: 'E',
+        templateUrl: 'partials/distance.html',
+    }
+})
+
 bullderApp.directive('bullderPlural', function() {
     return {
         restrict: 'E',
@@ -136,3 +175,18 @@ bullderApp.directive('bullderPlural', function() {
         template: "<span ng-if='count == 1'>{{ singular }}</span><span ng-if='count != 1'>{{ plural }}</span>",
     }
 });
+
+bullderApp.filter('orderObjectBy', function() {
+    return function(items, field, reverse) {
+        var filtered = [];
+        angular.forEach(items, function(item) {
+            filtered.push(item);
+        });
+        filtered.sort(function (a, b) {
+            return (a[field] > b[field] ? 1 : -1);
+        });
+        if(reverse) filtered.reverse();
+        return filtered;
+    };
+});
+

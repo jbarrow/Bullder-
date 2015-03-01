@@ -8,4 +8,10 @@
 
 <bullder-loading ng-if="data == undefined"></bullder-loading>
 
-<bullder-viewer votefunc="vote" data="obj" ng-repeat="obj in data | orderBy: sortOrder"></bullder-viewer>
+<bullder-viewer votefunc="vote" data="obj" ng-repeat="(key, obj) in data | orderObjectBy: sortOrder"></bullder-viewer>
+
+{{ data }}
+
+<div ng-if="data.length == 0">
+  <h2>No Bullders found in your area. :(</h2>
+</div>
