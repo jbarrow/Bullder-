@@ -1,23 +1,24 @@
 <div ng-if="data">
-  <bullder-viewer data="data"></bullder-viewer>
+  <bullder-viewer votefunc="vote" data="data"></bullder-viewer>
 
   <div ng-repeat="comment in data.comments" class="well">
     <p>{{ comment.text }}</p>
     <p class="text-muted" style="margin: 0; padding: 0;">
       <small>{{ comment.time }}</small>
       <span ng-if="comment.op" class="label label-primary">OP</span>
+      <span ng-if="comment.name">- {{ comment.name }}</span>
     </p>
   </div>
 
   <div>
     <form>
       <div class="form-group">
-        <input type="text" placeholder="Name (Optional)" class="form-control">
+        <input ng-model="$parent.newComment.name" type="text" placeholder="Name (Optional)" class="form-control">
       </div>
       <div class="form-group">
-        <textarea class="form-control"></textarea>
+        <textarea ng-model="$parent.newComment.text" class="form-control"></textarea>
       </div>
-      <button type="submit" class="btn btn-primary btn-sm">Post Comment</button>
+      <button ng-click="postComment()" type="button" class="btn btn-primary btn-sm">Post Comment</button>
     </form>
     <br/>
   </div>
