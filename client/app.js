@@ -27,7 +27,31 @@ var bullderApp = angular.module('bullderApp', ["ngRoute", "bullderServices"]).co
 
 
 bullderApp.controller('BullderNewController', ['$scope', function($scope) {
-
+    $scope.showImage = "images/Neighborhood.png";
+    $scope.$watch("distance", function(val) {
+        // OneHouse [0.1]
+        // ThreeHouse [0.25]
+        // Street [0.5]
+        // CityBlockGreen [1]
+        // Neighborhood [3]
+        // Area [6]
+        // City [10]
+        if (val <= 0.2) {
+            $scope.showImage = "images/OneHouse.png"
+        } else if (val > 0.2 && val <= 0.3) {
+            $scope.showImage = "images/ThreeHouse.png"
+        } else if (val > 0.3 && val <= 0.5) {
+            $scope.showImage = "images/Street.png"
+        } else if (val > 0.5 && val <= 1) {
+            $scope.showImage = "images/CityBlockGreen.png"
+        } else if (val > 1 && val <= 3) {
+            $scope.showImage = "images/Neighborhood.png"
+        } else if (val > 3 && val <= 6) {
+            $scope.showImage = "images/Area.png"
+        } else if (val > 6 && val <= 10) {
+            $scope.showImage = "images/City.png"
+        }
+    })
 }]);
 
 bullderApp.controller('BullderViewController', ['$scope', '$route', 'bullderProtocol', function($scope, $route, bullderProtocol) {

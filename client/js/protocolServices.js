@@ -1,6 +1,6 @@
-var bullderServices = angular.module('bullderServices', []);
+var bullderServices = angular.module('bullderServices', ['bullderDht']);
 
-bullderServices.factory("bullderProtocol", ["$q", "$timeout", function($q, $timeout) {
+bullderServices.factory("bullderProtocol", ["$q", "$timeout", "bullderDhtController", function($q, $timeout, bullderDhtController) {
     var rpc = window.rpcHandler;
 
     var mockComments = [
