@@ -18,7 +18,7 @@ bullderServices.factory("bullderProtocol", ["$q", "$timeout", function($q, $time
         }
     ];
 
-    var mockData = [
+    var cachedData = [
         {
             id: 0,
             time: "4 hours ago",
@@ -49,7 +49,7 @@ bullderServices.factory("bullderProtocol", ["$q", "$timeout", function($q, $time
 
     return {
       postItem: function(obj) {
-          
+          cachedData.push(obj);
       },
       postComment: function(obj, comment) {
           comment.time = "Just now";
@@ -71,7 +71,7 @@ bullderServices.factory("bullderProtocol", ["$q", "$timeout", function($q, $time
       getAllData: function() {
           var defer = $q.defer();
           $timeout(function() {
-              defer.resolve(mockData);
+              defer.resolve(cachedData);
           }, 0);
 
           return defer.promise;
@@ -79,7 +79,11 @@ bullderServices.factory("bullderProtocol", ["$q", "$timeout", function($q, $time
       getDataWithId: function(id) {
           var defer = $q.defer();
           $timeout(function() {
-              defer.resolve(mockData[id])
+              if(id > cachedData.length || id < 0) {
+                  defer.resolve(false);
+                  return;
+              }
+              defer.resolve(cachedData[id])
           }, 0);
           
           return defer.promise;
