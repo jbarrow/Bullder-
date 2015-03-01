@@ -1,6 +1,6 @@
 'use strict';
 
-var peer = new Peer('master-103', {key: 'lwjd5qra8257b9', debug: 3});
+var peer = new Peer('master-104', {key: '0bgupmxgrt1sv2t9', debug: 3});
 var clients = {};
 
 peer.on('open', function(id) {
@@ -20,8 +20,8 @@ function connect(c) {
 
   c.on('data', function(data) {
     console.log('Data received!');
-    c.send({acknowledge: true, neighbors: get_neighbors(data.id, 1.0)});
     clients[data.id] = data.pos;
+    c.send({acknowledge: true, neighbors: get_neighbors(data.id, 1.0)});
   });
 }
 
