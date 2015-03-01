@@ -4,7 +4,7 @@ var peer;
 var clientId;
 
 function connect() {
-	peer = new Peer({key: 'lwjd5qra8257b9', debug: 3});
+	peer = new Peer({key: '0bgupmxgrt1sv2t9', debug: 3});
 
 	peer.on('open', function(id) {
 		console.log(id);
@@ -15,6 +15,8 @@ function connect() {
 		console.log(err);
 	});
 
+	peer.on('connection', getData);
+
 }
 
 function connectToMasterPeer() {
@@ -23,9 +25,8 @@ function connectToMasterPeer() {
 }
 
 function sendFileChunk(peerId, fileChunk) {
-
-	//TODO
-
+	// send fileChunk to peerId
+	sendData(peerId, {file_chunk: fileChunk, });
 }
 
 function sendData(peerId, data) {
@@ -47,7 +48,7 @@ function sendData(peerId, data) {
 		conn.on('data', function(data) {
 
 			// close connection on acknowledgement
-			if (data.acknowledge) {
+			if (data.hasOwnProperty('acknowledge') && data.acknowledge) {
 				console.log("Data sent and acknowledged - closing connection.");
 				conn.close();
 			}
@@ -56,7 +57,28 @@ function sendData(peerId, data) {
 	});
 }
 
-function receiveFileChunk(peerId) {
+
+
+
+function receiveFileChunk(data) {
+
+
+
+}
+
+
+function getData(connection) {
+
+	connection.on('data', function(data) {
+		console.log('Retrieved data from connection ' + connection.id + ': ' + data);
+
+		// handle data
+		if (data.hasOwnProperty('type') && data.type == "filechunk") {
+			
+		}
+
+	    connection.send({acknowledge: true});
+	});
 
 }
 
