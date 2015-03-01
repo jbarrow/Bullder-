@@ -8,20 +8,20 @@ bullderServices.factory("bullderProtocol", ["$q", "$timeout", function($q, $time
             id: 0,
             text: "Hello, world",
             op: false,
-            time: "1 minute ago",
+            time: Date.parse("Feb 25, 2015"),
         },
         {
             id: 1,
             text: "This is a cool comment.",
             op: true,
-            time: "Just now",
+            time: Date.parse("Feb 29, 2015"),
         }
     ];
 
     var cachedData = [
         {
             id: 0,
-            time: "4 hours ago",
+            time: Date.parse("Feb 28, 2015"),
             score: 5,
             distance: "< 1 mile away",
             comments: mockComments,
@@ -30,7 +30,7 @@ bullderServices.factory("bullderProtocol", ["$q", "$timeout", function($q, $time
         },
         {
             id: 1,
-            time: "4 hours ago",
+            time: Date.parse("Feb 27, 2015"),
             score: 20,
             distance: "< 1 mile away",
             comments: mockComments,

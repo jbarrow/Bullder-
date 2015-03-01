@@ -2,11 +2,13 @@
   <bullder-viewer votefunc="vote" data="data"></bullder-viewer>
 
   <div ng-repeat="comment in data.comments" class="well">
-    <p>{{ comment.text }}</p>
+    <p>
+      {{ comment.text }}
+      <span ng-if="comment.name" class="text-muted">- {{ comment.name }}</span>
+    </p>
     <p class="text-muted" style="margin: 0; padding: 0;">
-      <small>{{ comment.time }}</small>
+      <small>{{ displayDate(comment.time) }}</small>
       <span ng-if="comment.op" class="label label-primary">OP</span>
-      <span ng-if="comment.name">- {{ comment.name }}</span>
     </p>
   </div>
 

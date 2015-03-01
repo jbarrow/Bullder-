@@ -1,15 +1,11 @@
 <div class="text-center">
-  <div class="btn-group" data-toggle="buttons">
-    <label class="btn btn-primary btn-sm" ng-class="{'active': view == 'new'}">
-      <input ng-click="view = 'new'" type="radio" autocomplete="off" ng-checked="view == 'new'"> New
-    </label>
-    <label class="btn btn-primary btn-sm" ng-class="{'active': view == 'hot'}">
-      <input ng-click="view = 'hot'" type="radio" autocomplete="off" ng-checked="view == 'hot'">Hot
-    </label>
+  <div class="btn-group">
+    <a ng-click="sortOrder = '-time'" class="btn btn-primary btn-sm" ng-class="{'active': sortOrder == '-time'}">New</a>
+    <a ng-click="sortOrder = '-score'" class="btn btn-primary btn-sm" ng-class="{'active': sortOrder == '-score'}">Hot</a>
   </div>
 </div>
 <br/>
 
 <bullder-loading ng-if="data == undefined"></bullder-loading>
 
-<bullder-viewer votefunc="vote" data="obj" ng-repeat="obj in data"></bullder-viewer>
+<bullder-viewer votefunc="vote" data="obj" ng-repeat="obj in data | orderBy: sortOrder"></bullder-viewer>
