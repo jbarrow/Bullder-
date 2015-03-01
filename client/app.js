@@ -61,7 +61,19 @@ bullderApp.controller('BullderNewController', ['$scope', 'bullderProtocol', '$lo
 
     $scope.newSnapBullder = function() {
         context.drawImage(video, 0, 0, 640, 480);
-        
+        console.log("Uploading... ");
+        var theObject = {
+            id: false,
+            time: new Date(),
+            score: 0,
+            location: [window.position.coords.latitude, window.position.coords.longitude],
+            distanceToLive: $scope.currentDistance,
+            comments: [],
+            title: $scope.title,
+        };
+
+        bullderProtocol.postItem(theObject, undefined, canvas.toDataURL());
+
         $location.path("/")
     }
 

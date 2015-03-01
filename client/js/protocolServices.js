@@ -66,8 +66,8 @@ bullderServices.factory("bullderProtocol", ["$q", "$timeout", "bullderPeerContro
     }
 
     return {
-      postItem: function(obj, file) {
-          fileToDataUrl(file).then(function(url) {
+      postItem: function(obj, file, url) {
+          var postUrl = function(obj, url) {
               obj.id = Math.random();
               obj.photo = url;
 
@@ -76,7 +76,15 @@ bullderServices.factory("bullderProtocol", ["$q", "$timeout", "bullderPeerContro
               bullderPeerController.broadcast("newPost", {
                   payload: obj,
               })
-          });
+          }
+
+          if(url == undefined) {
+              fileToDataUrl(file).then(function(url) {
+                  postUrl(obj, url);
+              });
+          } else {
+              postUrl(obj, url);
+          }
       },
       postComment: function(obj, comment) {
           comment.time = "Just now";
