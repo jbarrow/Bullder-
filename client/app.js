@@ -1,9 +1,11 @@
 $(document).ready(function() {
-   var found_location = function(pos) {
-       console.dir(pos);
-       window.position = pos;
-   }
-   navigator.geolocation.getCurrentPosition(found_location); 
+  var found_location = function(pos) {
+      console.dir(pos);
+      window.position = pos;
+      connectToMasterPeer();
+  }
+
+  navigator.geolocation.getCurrentPosition(found_location);
 });
 
 var bullderApp = angular.module('bullderApp', ["ngRoute", "bullderServices"]).config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
@@ -25,7 +27,7 @@ var bullderApp = angular.module('bullderApp', ["ngRoute", "bullderServices"]).co
 
 
 bullderApp.controller('BullderNewController', ['$scope', function($scope) {
-    
+
 }]);
 
 bullderApp.controller('BullderViewController', ['$scope', '$route', 'bullderProtocol', function($scope, $route, bullderProtocol) {
@@ -64,7 +66,7 @@ bullderApp.controller('BullderController', ['$scope', 'bullderProtocol', functio
     $scope.data = undefined;
     bullderProtocol.getAllData().then(function(data) {
        $scope.data = data;
-        
+
     });
 
     $scope.vote=function(obj, vote) {
