@@ -4,6 +4,7 @@ bullderServices.factory("bullderProtocol", ["$q", "$timeout", "bullderPeerContro
     var rpc = window.rpcHandler;
 
     var cachedData = {};
+    var seenVotes = {};
 
     var isOp = function(obj) {
         return false;
@@ -34,10 +35,11 @@ bullderServices.factory("bullderProtocol", ["$q", "$timeout", "bullderPeerContro
     bullderPeerController.registerHandler("newPost", gotNewPost);
 
     var gotNewVote = function(vote) {
-        if(cachedData[vote.id] === undefined) {
+        if(cachedData[vote.id] === undefined || seenVotes[vote.r] == true) {
             return
         }
 
+        seenVotes[vote.r] = true;
         cachedData[vote.id].score += vote.vote;
         bullderPeerController.broadcast("newVote", vote);
     }
@@ -89,9 +91,12 @@ bullderServices.factory("bullderProtocol", ["$q", "$timeout", "bullderPeerContro
               obj.score++;
           }
 
+          var r = Math.random()
+          seenVotes[r] = true
           bullderPeerController.broadcast("newVote", {
               id: obj.id,
               vote: 1,
+              r: r,
           })
       },
       downvoteItem: function(obj) {
@@ -100,9 +105,12 @@ bullderServices.factory("bullderProtocol", ["$q", "$timeout", "bullderPeerContro
               obj.score--;
           }
 
+          var r = Math.random()
+          seenVotes[r] = true
           bullderPeerController.broadcast("newVote", {
               id: obj.id,
               vote: -1,
+              r: r,
           })
       },
       getAllData: function() {

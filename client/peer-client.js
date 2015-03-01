@@ -67,6 +67,7 @@ bullderPeers.factory('bullderPeerController', ['bullderDhtController', '$q', fun
 	    peer = new Peer({key: '0bgupmxgrt1sv2t9', debug: 1});
 
 	    peer.on('connection', function(c) {
+                console.log("New Connection from", c.id);
                 openConnections[c.id] = {
                     conn: c,
                     connected: true,
@@ -104,7 +105,7 @@ bullderPeers.factory('bullderPeerController', ['bullderDhtController', '$q', fun
             if(data.pos === undefined)
                 return
 
-            console.log('Data received!');
+            console.log("Received Data", data.type, "from peer", c.id);
             
             openConnections[data.id] = {
                 conn: c,
@@ -198,6 +199,7 @@ bullderPeers.factory('bullderPeerController', ['bullderDhtController', '$q', fun
                 var result = dhtHandler[data.dhtType].handler(id, data.payload);
                 dhtHandler[data.dhtType].cb(null, result);
             } else {
+                console.log("Received message from", id, "of type", data.type);
                 console.dir(data);
                 if(regReceivers[data.type] == undefined) {
                     console.log("Couldn't find receiver for", data.type);
@@ -208,19 +210,25 @@ bullderPeers.factory('bullderPeerController', ['bullderDhtController', '$q', fun
     }
 
     function masterHandler(data) {
+        console.log("Received Data", data.type);
+
 	// grab neighbors and create connections if passed
 	if (data.hasOwnProperty('neighbors')) {
+            console.log("Got neighbors", data.neighbors.length)
 	    for (var i = 0; i < data.neighbors.length; i++) {
                 var conn = peer.connect(data.neighbors[i], {reliable: true}) 
+
                 openConnections[data.neighbors[i]] = {
                     conn: conn,
-                    connected: false,
+                    connected: true,
                 }
 
                 conn.on("open", function() {
+                    console.log("Connected to Peer", data.neighbors[i]);
                     if (openConnections[data.neighbors[i]] != undefined)
                         openConnections[data.neighbors[i]].connected = true;
                 });
+
                 conn.on("data", neighborHandler(data.neighbors[i]));
 	    }
 	}
