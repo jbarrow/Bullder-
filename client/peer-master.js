@@ -1,6 +1,6 @@
 'use strict';
 
-var peer = new Peer('master-100', {key: 'lwjd5qra8257b9', debug: 3});
+var peer = new Peer('master-101', {key: 'lwjd5qra8257b9', debug: 3});
 var clients = {};
 
 peer.on('open', function(id) {
@@ -25,7 +25,7 @@ function connect(c) {
     c.send({acknowledge: true});
     clients[data.id] = data.pos;
     console.log(clients);
-    console.log(get_neighbors(data.id));
+    console.log(get_neighbors(data.id, 1.0));
   });
 }
 
@@ -59,6 +59,7 @@ function get_neighbors(client, max_distance) {
   if(typeof(max_distance) === 'undefined') max_distance = 1.0;
 
   neighbors = [];
+
   for (var potential in clients) {
     if(distance(clients[client], clients[potential]) < max_distance) {
       neighbors.append(potential);
