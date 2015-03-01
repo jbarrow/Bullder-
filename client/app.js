@@ -44,6 +44,10 @@ bullderApp.controller('BullderViewController', ['$scope', '$route', 'bullderProt
         }
     }
 
+    $scope.displayDate = function(d) {
+        return moment(d).fromNow()
+    }
+
     $scope.postComment = function() {
         console.log($scope.newComment);
         bullderProtocol.postComment($scope.data, $scope.newComment);
@@ -57,7 +61,7 @@ bullderApp.controller('BullderViewController', ['$scope', '$route', 'bullderProt
 }]);
 
 bullderApp.controller('BullderController', ['$scope', 'bullderProtocol', function($scope, bullderProtocol) {
-    $scope.view = "new";
+    $scope.sortOrder = "-time";
 
     $scope.data = undefined;
     bullderProtocol.getAllData().then(function(data) {
@@ -80,6 +84,11 @@ bullderApp.directive('bullderViewer', function() {
         scope: {
             data: "=data",
             votefunc: "=votefunc",
+        },
+        link: function(scope, elm, attrs) {
+            scope.displayDate = function(d) {
+                return moment(d).fromNow();
+            }
         },
         templateUrl: 'partials/viewer.html',
     }

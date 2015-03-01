@@ -21,7 +21,7 @@ function connect() {
 
 function connectToMasterPeer() {
 	// send data to master peer
-	sendData('master-101', {id: clientId, pos: [window.position.coords.latitude, window.position.coords.longitude]});
+	sendData('master-103', {id: clientId, pos: [window.position.coords.latitude, window.position.coords.longitude]});
 }
 
 function sendFileChunk(peerId, fileChunk) {
