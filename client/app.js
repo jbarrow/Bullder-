@@ -82,6 +82,13 @@ bullderApp.directive('bullderViewer', function() {
     }
 });
 
+bullderApp.directive('bullderLoading', function() {
+    return {
+        restrict: 'E',
+        templateUrl: 'partials/loading.html',
+    }
+})
+
 bullderApp.directive('bullderPlural', function() {
     return {
         restrict: 'E',

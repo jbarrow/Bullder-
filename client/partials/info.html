@@ -23,6 +23,8 @@
     <br/>
   </div>
 </div>
-<div class="text-center" ng-if="!data">
+<div class="text-center" ng-if="data == false">
   <h2>Uh oh! Couldn't find that Bullder for you.</h2>
 </div>
+
+<bullder-loading ng-if="data == undefined"></bullder-loading>
