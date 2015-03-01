@@ -1,6 +1,7 @@
 $(document).ready(function() {
    var found_location = function(pos) {
        console.dir(pos);
+       window.position = pos;
    }
    navigator.geolocation.getCurrentPosition(found_location); 
 });
