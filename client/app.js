@@ -30,7 +30,7 @@ bullderApp.controller('BullderMasterController', ["bullderPeerController", funct
     bullderPeerController.createPeer(true);
 }]);
 
-bullderApp.controller('BullderNewController', ['$scope', 'bullderProtocol', function($scope, bullderProtocol) {
+bullderApp.controller('BullderNewController', ['$scope', 'bullderProtocol', '$location', function($scope, bullderProtocol, $location) {
     $scope.showImage = "images/Neighborhood.png";
     $scope.currentDistance = 2;
     $scope.$watch("distance", function(val) {
@@ -61,6 +61,7 @@ bullderApp.controller('BullderNewController', ['$scope', 'bullderProtocol', func
 
     $scope.newSnapBullder = function() {
         context.drawImage(video, 0, 0, 640, 480);
+        $location.path("/")
     }
 
     $scope.newUploadBullder = function() {
@@ -83,6 +84,7 @@ bullderApp.controller('BullderNewController', ['$scope', 'bullderProtocol', func
         };
 
         bullderProtocol.postItem(theObject, theFile);
+        $location.path("/")
     }
 }]);
 

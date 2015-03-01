@@ -8,7 +8,7 @@ bullderPeers.factory('bullderPeerController', ['bullderDhtController', '$q', fun
 
     var openConnections = {};
 
-    var masterPeer = "master-105";
+    var masterPeer = "master-107";
 
     var dhtReceivers = {};
     var regReceivers = {};
@@ -234,6 +234,7 @@ bullderPeers.factory('bullderPeerController', ['bullderDhtController', '$q', fun
 
     function sendData(conn, data) {
         if (clientId != undefined) {
+            console.log("Sending data", data.type, "to client", conn.id);
 	    // send data to peerId
 	    conn.send(data);
 	} else {

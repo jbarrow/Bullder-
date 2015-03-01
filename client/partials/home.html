@@ -1,14 +1,14 @@
 <div class="text-center">
   <div class="btn-group">
-    <a ng-click="sortOrder = '-time'" class="btn btn-primary btn-sm" ng-class="{'active': sortOrder == '-time'}">New</a>
-    <a ng-click="sortOrder = '-score'" class="btn btn-primary btn-sm" ng-class="{'active': sortOrder == '-score'}">Hot</a>
+    <a ng-click="sortOrder = 'time'" class="btn btn-primary btn-sm" ng-class="{'active': sortOrder == 'time'}">New</a>
+    <a ng-click="sortOrder = 'score'" class="btn btn-primary btn-sm" ng-class="{'active': sortOrder == 'score'}">Hot</a>
   </div>
 </div>
 <br/>
 
 <bullder-loading ng-if="data == undefined"></bullder-loading>
 
-<bullder-viewer votefunc="vote" data="obj" ng-repeat="(key, obj) in data | orderObjectBy: sortOrder"></bullder-viewer>
+<bullder-viewer votefunc="vote" data="obj" ng-repeat="(key, obj) in data | orderObjectBy: sortOrder:true"></bullder-viewer>
 
 <div ng-if="data.length == 0">
   <h2>No Bullders found in your area. :(</h2>
